@@ -27,9 +27,13 @@ class FileSub:
         await self.Queue.push("f{id}:{c_time}")
 
     async def update(self,id,content):
-        self.store.put(id,content)
+        self.store.change(id,content)
         c_time = int(time.time() * 1000)
-        await self.Queue.push()
+        await self.Queue.push("f{id}:{c_time}")
+    async def cancle(self,id):
+        self.store.delete(id)
+        c_time = int(time.time() * 1000)
+        await self.Queue.push("f{id}:gone")
 
 
 class StreamingResponseQueue:
